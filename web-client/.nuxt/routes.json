@@ -1,5 +1,12 @@
 [
   {
+    "name": "inspire",
+    "path": "/inspire",
+    "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\inspire.vue",
+    "chunkName": "pages/inspire",
+    "_name": "_401375a6"
+  },
+  {
     "name": "index",
     "path": "/",
     "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\index.vue",
