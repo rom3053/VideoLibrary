@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-file-input> </v-file-input>
+    <v-file-input accept="video/*" @change="handleFile"> </v-file-input>
+    <form action="">
+      <input name="">
+    </form>
     <div v-if="videos">
       <p v-for="v in videos">
         {{v.name}}
@@ -34,7 +37,7 @@ import Axios from 'axios'
       }),
       ...mapState('videos', {
         videos: state => state.videos
-      })
+      }) 
     },
     methods: {
       ...mapMutations([
@@ -47,6 +50,15 @@ import Axios from 'axios'
       async saveVideo() {
         await this.createVideo({ video: { name: this.videoName } });
         this.videoName = "";
+      },
+      async handleFile(files){
+        if(!file) return;
+        
+        const form = new FormData();
+        form.append("video", file)
+
+        const result = await Axios.post("http://localhost:5000/api/videoFiles", form);
+        console.log("Result",result)
       }
     }
 
