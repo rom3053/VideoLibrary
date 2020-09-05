@@ -9,5 +9,6 @@ namespace VideoLibrary.API.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string VideoFile { get; set; }
     }
 }

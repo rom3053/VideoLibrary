@@ -1,4 +1,3 @@
-import Axios from "axios";
 
 const initState = () => ({
   videos: []
@@ -17,13 +16,13 @@ export const mutations = {
 
 export const actions = {
   async fetchVideos({ commit }) {
-    const videos = (await Axios.get("http://localhost:5000/api/videos")).data;
+    const videos = await this.$axios.$get("http://localhost:5000/api/videos");
     console.log("videos:", videos);
     commit("setVideos", { videos })
   },
 
   async createVideo({ commit, dispatch }, {video}) {
-    await Axios.post("http://localhost:5000/api/videos", video);
+    await this.$axios.post("http://localhost:5000/api/videos", video);
     await dispatch('fetchVideos')
   }
 

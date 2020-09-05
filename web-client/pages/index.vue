@@ -1,23 +1,56 @@
 <template>
   <div>
-    <v-file-input accept="video/*" @change="handleFile"> </v-file-input>
-    <form action="">
-      <input name="">
-    </form>
+
+   
     <div v-if="videos">
-      <p v-for="v in videos">
+      <div v-for="v in videos">
         {{v.name}}
-      </p>
+        <div>
+          <video width="400" controls :src="`http://localhost:5000/api/videoFiles/${v.videoFile}`"> </video>
+        </div>
+      </div>
     </div>
 
-    <div>
-      <v-text-field label="Videoing Name" v-model="videoName"></v-text-field>
-      <v-btn @click="saveVideo">Save Video</v-btn>
-    </div>
 
-    {{message}}
-    <v-btn @click="reset">Reset Message</v-btn>
-    <v-btn @click="resetVideos">Reset Videos</v-btn>
+
+    <v-stepper v-model="step">
+      <v-stepper-header>
+        <v-stepper-step :complete="step > 1" step="1">Upload Video</v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step :complete="step > 2" step="2">Video Information</v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step step="3">Confirmation</v-stepper-step>
+      </v-stepper-header>
+
+      <v-stepper-items>
+        <v-stepper-content step="1">
+
+          <div>
+            <v-file-input accept="video/*" @change="handleFile"> </v-file-input>
+          </div>
+
+        </v-stepper-content>
+
+        <v-stepper-content step="2">
+
+          <div>
+            <v-text-field label="Video Name" v-model="videoName"></v-text-field>
+            <v-btn @click="saveVideo">Save Video</v-btn>
+          </div>
+
+        </v-stepper-content>
+
+        <v-stepper-content step="3">
+          <div>
+            Success 
+          </div>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
 
   </div>
 </template>
@@ -29,49 +62,40 @@ import Axios from 'axios'
 
   export default {
     data: () => ({
-      videoName: ""
+      videoName: "",
+      step: "1"
     }),
     computed: {
-      ...mapState({
-        message: state => state.message
-      }),
-      ...mapState('videos', {
-        videos: state => state.videos
-      }) 
+      ...mapState('videos', ['videos']),
+      ...mapState('videoFiles', ['uploadPromise'])
     },
     methods: {
-      ...mapMutations([
-        'reset'
-      ]),
-      ...mapMutations('videos', {
-        resetVideos: 'reset'
+      ...mapMutations('videoFiles', {
+        resetVideoFiles: 'reset'
       }),
       ...mapActions('videos', ['createVideo']),
-      async saveVideo() {
-        await this.createVideo({ video: { name: this.videoName } });
-        this.videoName = "";
-      },
-      async handleFile(files){
+      ...mapActions('videoFiles', ['startVideoUpload']),
+       async handleFile(file){
         if(!file) return;
         
         const form = new FormData();
         form.append("video", file)
+        this.startVideoUpload({form});
+        this.step++;
+        
+      },
+      async saveVideo() {
+        if (!this.uploadPromise) {
+          console.log("uploadPromise is null")
+          return;
+        }
 
-        const result = await Axios.post("http://localhost:5000/api/videoFiles", form);
-        console.log("Result",result)
+        const videoFile = await this.uploadPromise;
+        await this.createVideo({ video: { name: this.videoName, videoFile } });
+        this.videoName = "";
+        this.step++;
+        this.resetVideoFiles();
       }
     }
-
-
-
-    //async fetch (){
-    //  await this.$store.dispatch('fetchMessage');
-    //}
-    //asyncData(payload){
-    //  return Axios.get("http://localhost:5000/api/home")
-    //    .then(({data}) => {
-    //      return { message: data }
-    //    })
-    //}
 }
 </script>

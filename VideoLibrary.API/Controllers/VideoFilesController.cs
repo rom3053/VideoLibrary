@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace VideoLibrary.API.Controllers
 {
     [Route("api/videoFiles")]
-    
+
     public class VideoFilesController : ControllerBase
     {
         private readonly IWebHostEnvironment _env;
@@ -19,18 +20,29 @@ namespace VideoLibrary.API.Controllers
         {
             _env = env;
         }
+
+        [HttpGet("{videoFile}")]
+        public IActionResult GetVideo(string videoFile)
+        {
+            var mime = videoFile.Split('.').Last();
+            var savePath = Path.Combine(_env.WebRootPath, videoFile);
+
+            return new FileStreamResult(new FileStream(savePath, FileMode.Open, FileAccess.Read), 
+                "videoFile/*");
+        }
+
         [HttpPost]
-        public async Task<IActionResult> UploadVideoFileAsync(IFormFile video)
+        public async Task<IActionResult> UploadVideoFile(IFormFile video)
         {
             var mime = video.FileName.Split('.').Last();
             var fileName = string.Concat(Path.GetRandomFileName(), ".", mime);
             var savePath = Path.Combine(_env.WebRootPath, fileName);
 
-            using (var fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write))
+            await using (var fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write))
             {
                 await video.CopyToAsync(fileStream);
             }
-                return Ok();
+                return Ok(fileName);
         }
     }
 }
