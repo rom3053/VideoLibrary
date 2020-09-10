@@ -20,10 +20,4 @@ export const actions = {
     console.log("videos:", videos);
     commit("setVideos", { videos })
   },
-
-  async createVideo({ commit, dispatch }, {video}) {
-    await this.$axios.post("http://localhost:5000/api/videos", video);
-    await dispatch('fetchVideos')
-  }
-
 }
