@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VideoLibrary.API.Models;
+using VideoLibrary.Data;
 
 namespace VideoLibrary.API.Controllers
 {
@@ -12,46 +13,50 @@ namespace VideoLibrary.API.Controllers
     [ApiController]
     public class VideosController : ControllerBase
     {
-        private readonly VideoStore _store;
+        private readonly AppDbContext _ctx;
             
-        public VideosController(VideoStore store)
+        public VideosController(AppDbContext ctx)
         {
-            _store = store;
+            _ctx = ctx;
         }
 
-        // /api/videos
         [HttpGet]
-        public IActionResult All() => Ok(_store.All);
+        public IEnumerable<Video> All() => _ctx.Videos.ToList();
 
-        // /api/videos/{id}
         [HttpGet("{id}")]
-        public IActionResult Get(int id) => Ok(_store.All.FirstOrDefault(x => x.Id.Equals(id)));
+        public Video Get(int id) => _ctx.Videos.FirstOrDefault(x => x.Id.Equals(id));
 
-        //// /api/videos/{id}/submissions?
-        //[HttpGet("{id}")]
-        //public IActionResult GetSub(int id) => Ok(_store.All.FirstOrDefault(x => x.Id.Equals(id)));
+        [HttpGet("{videoId}/submissions")]
+        public IEnumerable<Submission> ListSubmissionsForVideo(int videoId) =>
+            _ctx.Submissions.Where(x => x.VideoId.Equals(videoId)).ToList();
 
-        // /api/videos/
         [HttpPost]
-        public IActionResult Create([FromBody] Video video)
+        public async Task<Video> Create([FromBody] Video video)
         {
-            _store.Add(video);
-            return Ok();
+            _ctx.Add(video);
+            await  _ctx.SaveChangesAsync();
+            return video;
         }
 
-        // /api/videos/
         [HttpPut]
-        public IActionResult Update([FromBody] Video video)
+        public async Task<Video> Update([FromBody] Video video)
         {
-            _store.Add(video);
-            return Ok();
+            if (video.Id == 0)
+            {
+                return null;
+            }
+            _ctx.Add(video);
+            await _ctx.SaveChangesAsync();
+            return video;
         }
 
-        // /api/videos/{id}
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            throw new NotImplementedException();
+            var video = _ctx.Videos.FirstOrDefault(x => x.Id.Equals(id));
+            video.Deleted = true;
+            await _ctx.SaveChangesAsync();
+            return Ok();
         }
     }
 
