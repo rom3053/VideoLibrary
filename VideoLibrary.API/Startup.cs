@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VideoLibrary.Data;
 
 namespace VideoLibrary.API
 {
@@ -16,7 +18,8 @@ namespace VideoLibrary.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<VideoStore>();
+            //services.AddSingleton<VideoStore>();
+            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Dev"));
             services.AddCors(options => options.AddPolicy(AllCors, build =>
                                                                     build.AllowAnyHeader()
                                                                     .AllowAnyMethod()

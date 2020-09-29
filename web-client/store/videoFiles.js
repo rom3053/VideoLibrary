@@ -1,3 +1,4 @@
+import { UPLOAD_TYPE } from "../data/enum"
 
 const initState = () => ({
   uploadPromise: null,
@@ -17,11 +18,20 @@ export const mutations = {
   },
   setType(state, { type }) {
     state.type = type
-    state.step++
+    if (type === UPLOAD_TYPE.VIDEO) {
+      state.step++
+    }
+    else if (type === UPLOAD_TYPE.SUBMISSION) {
+      state.step += 2;
+    }
+    
   },
   setTask(state, { uploadPromise }) {
     state.uploadPromise = uploadPromise
     state.step++
+  },
+  incStep(state) {
+    state.step++;
   },
   reset(state) {
     Object.assign(state, initState())
@@ -33,9 +43,15 @@ export const actions = {
     const uploadPromise = this.$axios.$post("http://localhost:5000/api/videoFiles", form);
     commit("setTask", {uploadPromise})
   },
-  async createVideo({ commit, dispatch }, { video }) {
-    await this.$axios.post("/api/videos", video)
-    await dispatch('videos/fetchVideos')
+  async createVideo({state, commit, dispatch }, { video, submission }) {
+    if (state.type === UPLOAD_TYPE.VIDEO) {
+      const createdVideo = await this.$axios.$post("/api/videos", video)
+      submission.videoId = createdVideo.id
+    }
+   
+    const createdSubmission = await this.$axios.$post("/api/submissions", submission)
+    await dispatch('videos/fetchVideos', null, { root: true })
+    await dispatch('submissions/fetchSubmissions', null, { root: true })
   }
 
 }

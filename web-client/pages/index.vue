@@ -1,12 +1,17 @@
 <template>
   <div>
 
-   
     <div v-if="videos">
       <div v-for="v in videos">
-        {{v.name}}
+        {{v.id}} - {{v.name}}
+      </div>
+    </div>
+   
+    <div v-if="submissions">
+      <div v-for="s in submissions">
+        {{s.id}} - {{s.description}} - {{s.videoId}}
         <div>
-          <video width="400" controls :src="`http://localhost:5000/api/videoFiles/${v.videoFile}`"> </video>
+          <video width="400" controls :src="`http://localhost:5000/api/videoFiles/${s.videoFile}`"> </video>
         </div>
       </div>
     </div>
@@ -19,8 +24,10 @@
   import { mapState, mapActions, mapMutations } from 'vuex';
 
   export default {
-    computed: mapState('videos', ['videos']),
-      
+    computed: {
+      ...mapState('videos', ['videos']),
+      ...mapState('submissions', ['submissions'])
+    }
     
 }
 </script>

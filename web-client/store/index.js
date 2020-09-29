@@ -12,6 +12,7 @@ export const mutations = {
 export const actions = {
   async nuxtServerInit({commit, dispatch}) {
     await dispatch("videos/fetchVideos")
+    await dispatch("submissions/fetchSubmissions")
   }
 
 

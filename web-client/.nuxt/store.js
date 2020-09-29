@@ -19,6 +19,7 @@ let store = {};
   // Enforce store modules
   store.modules = store.modules || {}
 
+  resolveStoreModules(require('..\\store\\submissions.js'), 'submissions.js')
   resolveStoreModules(require('..\\store\\videoFiles.js'), 'videoFiles.js')
   resolveStoreModules(require('..\\store\\videos.js'), 'videos.js')
 
@@ -28,6 +29,7 @@ let store = {};
     // Whenever any Vuex module is updated...
     module.hot.accept([
       '..\\store\\index.js',
+      '..\\store\\submissions.js',
       '..\\store\\videoFiles.js',
       '..\\store\\videos.js',
     ], () => {
