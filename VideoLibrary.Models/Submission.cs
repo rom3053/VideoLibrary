@@ -4,9 +4,9 @@ using System.Text;
 
 namespace VideoLibrary.API.Models
 {
-    public class Submission : BaseModel
+    public class Submission : BaseModel<int>
     {
-        public int VideoId { get; set; }
+        public string VideoId { get; set; }
         public string VideoFile { get; set; }
         public string Description { get; set; }
     }

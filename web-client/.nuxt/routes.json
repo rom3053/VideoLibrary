@@ -3,14 +3,18 @@
     "name": "inspire",
     "path": "/inspire",
     "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\inspire.vue",
-    "chunkName": "pages/inspire",
-    "_name": "_401375a6"
+    "chunkName": "pages/inspire"
+  },
+  {
+    "name": "videos-videoSubmission",
+    "path": "/videos/:videoSubmission?",
+    "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\videos\\\\_videoSubmission.vue",
+    "chunkName": "pages/videos/_videoSubmission"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\index.vue",
-    "chunkName": "pages/index",
-    "_name": "_e17fa6c4"
+    "chunkName": "pages/index"
   }
 ]

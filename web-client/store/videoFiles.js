@@ -49,9 +49,8 @@ export const actions = {
       submission.videoId = createdVideo.id
     }
    
-    const createdSubmission = await this.$axios.$post("/api/submissions", submission)
-    await dispatch('videos/fetchVideos', null, { root: true })
-    await dispatch('submissions/fetchSubmissions', null, { root: true })
+    await this.$axios.$post("/api/submissions", submission)
+    
   }
 
 }

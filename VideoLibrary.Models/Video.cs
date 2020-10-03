@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace VideoLibrary.API.Models
 {
-    public class Video : BaseModel
+    public class Video : BaseModel<string>
     {
 
         public string Name { get; set; }
-        public string VideoFile { get; set; }
+        //public string VideoFile { get; set; }
 
  
     }

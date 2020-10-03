@@ -24,15 +24,20 @@ namespace VideoLibrary.API.Controllers
         public IEnumerable<Video> All() => _ctx.Videos.ToList();
 
         [HttpGet("{id}")]
-        public Video Get(int id) => _ctx.Videos.FirstOrDefault(x => x.Id.Equals(id));
+        public Video Get(string id) =>
+            _ctx.Videos
+            .FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
 
         [HttpGet("{videoId}/submissions")]
-        public IEnumerable<Submission> ListSubmissionsForVideo(int videoId) =>
-            _ctx.Submissions.Where(x => x.VideoId.Equals(videoId)).ToList();
+        public IEnumerable<Submission> ListSubmissionsForVideo(string videoId) =>
+            _ctx.Submissions
+            .Where(x => x.VideoId.Equals(videoId, StringComparison.InvariantCultureIgnoreCase))
+            .ToList();
 
         [HttpPost]
         public async Task<Video> Create([FromBody] Video video)
         {
+            video.Id = video.Name.Replace(" ", "-").ToLowerInvariant();
             _ctx.Add(video);
             await  _ctx.SaveChangesAsync();
             return video;
@@ -41,7 +46,7 @@ namespace VideoLibrary.API.Controllers
         [HttpPut]
         public async Task<Video> Update([FromBody] Video video)
         {
-            if (video.Id == 0)
+            if (string.IsNullOrEmpty(video.Id))
             {
                 return null;
             }
@@ -51,7 +56,7 @@ namespace VideoLibrary.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             var video = _ctx.Videos.FirstOrDefault(x => x.Id.Equals(id));
             video.Deleted = true;
