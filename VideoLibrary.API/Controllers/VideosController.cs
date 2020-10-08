@@ -37,7 +37,8 @@ namespace VideoLibrary.API.Controllers
         [HttpPost]
         public async Task<Video> Create([FromBody] Video video)
         {
-            video.Id = video.Name.Replace(" ", "-").ToLowerInvariant();
+            //video.Id = video.Name.Replace(" ", "-").ToLowerInvariant();
+            video.Id = Guid.NewGuid().ToString("N");
             _ctx.Add(video);
             await  _ctx.SaveChangesAsync();
             return video;

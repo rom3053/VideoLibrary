@@ -1,8 +1,20 @@
 {
-  "VideoUpload": {
-    "description": "Auto imported from components/video-upload.vue"
+  "OldVideoUpload": {
+    "description": "Auto imported from components/Old-video-upload.vue"
   },
-  "LazyVideoUpload": {
-    "description": "Auto imported from components/video-upload.vue"
+  "LazyOldVideoUpload": {
+    "description": "Auto imported from components/Old-video-upload.vue"
+  },
+  "ContentCreationDialog": {
+    "description": "Auto imported from components/content-creation/content-creation-dialog.vue"
+  },
+  "LazyContentCreationDialog": {
+    "description": "Auto imported from components/content-creation/content-creation-dialog.vue"
+  },
+  "VideoUploadSteps": {
+    "description": "Auto imported from components/content-creation/video-upload-steps.vue"
+  },
+  "LazyVideoUploadSteps": {
+    "description": "Auto imported from components/content-creation/video-upload-steps.vue"
   }
 }

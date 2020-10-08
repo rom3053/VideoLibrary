@@ -5,12 +5,10 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn depressed @click="toggleActivity">
-        Upload
-      </v-btn>
 
+    <content-creation-dialog></content-creation-dialog>
     </v-app-bar>
-    <video-upload/>
+    
     <v-main>
 
       <nuxt />
@@ -22,10 +20,9 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
-  import VideoUpload from '../components/video-upload.vue'
+  import ContentCreationDialog from '../components/content-creation/content-creation-dialog'
   export default {
-    methods: mapMutations('videoFiles', ['toggleActivity']),
+    components: {ContentCreationDialog}
   
   }
 </script>

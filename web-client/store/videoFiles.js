@@ -1,37 +1,23 @@
-import { UPLOAD_TYPE } from "../data/enum"
 
 const initState = () => ({
   uploadPromise: null,
   active: false,
-  type: "",
-  step: 1,
+  component: null,
 })
 
 export const state = initState
 
 export const mutations = {
-  toggleActivity(state) {
-    state.active = !state.active
-    if (!state.active) {
-      Object.assign(state, initState())
-    }
+  activate(state, {component}) {
+    state.active = true;
+    state.component = component
   },
-  setType(state, { type }) {
-    state.type = type
-    if (type === UPLOAD_TYPE.VIDEO) {
-      state.step++
-    }
-    else if (type === UPLOAD_TYPE.SUBMISSION) {
-      state.step += 2;
-    }
-    
+  hide(state){
+    state.active = false;
   },
   setTask(state, { uploadPromise }) {
     state.uploadPromise = uploadPromise
     state.step++
-  },
-  incStep(state) {
-    state.step++;
   },
   reset(state) {
     Object.assign(state, initState())
@@ -44,10 +30,9 @@ export const actions = {
     commit("setTask", {uploadPromise})
   },
   async createVideo({state, commit, dispatch }, { video, submission }) {
-    if (state.type === UPLOAD_TYPE.VIDEO) {
+    
       const createdVideo = await this.$axios.$post("/api/videos", video)
       submission.videoId = createdVideo.id
-    }
    
     await this.$axios.$post("/api/submissions", submission)
     
