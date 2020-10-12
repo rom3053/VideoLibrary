@@ -8,7 +8,12 @@
       <div v-bind:key="s" v-for="s in submissions">
         {{s.id}} - {{s.description}} - {{s.videoId}}
         <div>
-          <video width="400" controls :src="`http://localhost:5000/api/videoFiles/${s.videoFile}`"> </video>
+          <video width="400" :src="`http://localhost:5000/api/videoFiles/${s.videoFile}`" controls>
+            
+
+          </video>
+          <!--"https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4
+            `http://localhost:5000/api/videoFiles/${s.videoFile}`"-->
         </div>
       </div>
     </div>

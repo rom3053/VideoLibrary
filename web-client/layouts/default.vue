@@ -1,7 +1,9 @@
 <template>
   <v-app dark>
     <v-app-bar app dense>
-      <v-toolbar-title>Videos Library</v-toolbar-title>
+      <v-toolbar-title>
+      <router-link tag="v-toolbar-title" :to="`/`">Videos Library</router-link>
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 

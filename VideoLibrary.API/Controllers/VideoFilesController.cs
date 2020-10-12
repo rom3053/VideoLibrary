@@ -27,11 +27,14 @@ namespace VideoLibrary.API.Controllers
             var mime = videoFile.Split('.').Last();
             var savePath = Path.Combine(_env.WebRootPath, videoFile);
 
-            return new FileStreamResult(new FileStream(savePath, FileMode.Open, FileAccess.Read), 
-                "videoFile/*");
+            return  PhysicalFile(savePath, "videoFile/*", enableRangeProcessing: true);
+            //return new FileStreamResult(new FileStream(savePath, FileMode.Open, FileAccess.Read), 
+            //    "videoFile/*");
         }
 
         [HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1073741824)]
+        [RequestSizeLimit(1073741824)]
         public async Task<IActionResult> UploadVideoFile(IFormFile video)
         {
             var mime = video.FileName.Split('.').Last();

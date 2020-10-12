@@ -20,7 +20,11 @@ namespace VideoLibrary.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                webBuilder.UseStartup<Startup>();
+                webBuilder.UseKestrel(options =>
+                    {
+                        options.Limits.MaxRequestBodySize = 1073741824;
+                    });
                 });
     }
 }
