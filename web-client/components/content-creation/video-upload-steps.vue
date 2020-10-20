@@ -1,9 +1,9 @@
 <template>
   <v-stepper v-model="step">
     <v-stepper-header>
-      <v-stepper-step :complete="step > 1" step="1"
-        >Video Information</v-stepper-step
-      >
+      <v-stepper-step :complete="step > 1" step="1">
+        Video Information
+      </v-stepper-step>
 
       <v-divider></v-divider>
 
@@ -74,6 +74,7 @@ export default {
       }
 
       const videoFile = await this.uploadPromise;
+      console.log("VideoFile",videoFile);
       await this.createVideo({
         video: { name: this.formVideo.videoName },
         submission: {
@@ -82,6 +83,7 @@ export default {
           videoId: 1,
         },
       });
+
       this.reset();
       this.hide();
       Object.assign(this.$data, initState());

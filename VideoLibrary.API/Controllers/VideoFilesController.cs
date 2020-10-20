@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using Xabe.FFmpeg;
 
 namespace VideoLibrary.API.Controllers
 {
@@ -45,7 +48,26 @@ namespace VideoLibrary.API.Controllers
             {
                 await video.CopyToAsync(fileStream);
             }
-                return Ok(fileName);
+
+           string outputPath = Path.Combine(_env.WebRootPath, fileName + "FFmpeg" + ".mp4");
+           string executablesPath = Path.Combine(_env.ContentRootPath,"FFmpeg");
+           FFmpeg.SetExecutablesPath(executablesPath);
+           //IConversion result = await FFmpeg.Conversions.FromSnippet.ToWebM(savePath, outputPath);
+           //IConversionResult conversionResult = await result.Start();
+
+            IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(savePath);
+            IStream videoStream = mediaInfo.VideoStreams.FirstOrDefault()
+                ?.SetCodec(VideoCodec.h264)
+                ?.SetSize(VideoSize.Hd480)
+                ?.SetFramerate(29.97);
+            IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
+                ?.SetCodec(AudioCodec.aac);
+            IConversionResult conversionResult = await FFmpeg.Conversions.New()
+                .AddStream(audioStream, videoStream)
+                .SetOutput(outputPath)
+                .Start();
+
+            return Ok(fileName);
         }
     }
 }
