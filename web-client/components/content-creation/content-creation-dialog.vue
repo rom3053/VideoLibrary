@@ -6,6 +6,9 @@
           <v-btn depressed v-bind="attrs" v-on="on">
               Create
           </v-btn>
+          <v-btn @click="startResearch">
+              Research
+          </v-btn>
           </template>
           <v-list>
               <v-list-item v-for="(item, i) in menuItems" :key="`ccd-menu-${i}`" 
@@ -36,7 +39,8 @@
     name: "content-creation-dialog",
     components: {VideoUploadSteps},
     computed: {
-      ...mapState('videoFiles', ['active','component']),
+      ...mapState('videoFiles', ['active', 'component']),
+      
       menuItems(){
           return [
               {component: VideoUploadSteps, title: "Video"},
@@ -45,6 +49,7 @@
     },
     methods: {
       ...mapMutations('videoFiles', ['reset', 'activate']),
+      ...mapActions("videoFiles", ["startResearch"]),
     }
   }
 </script>

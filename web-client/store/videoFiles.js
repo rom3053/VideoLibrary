@@ -29,6 +29,9 @@ export const actions = {
     const uploadPromise = this.$axios.$post("http://localhost:5000/api/videoFiles", form);
     commit("setTask", {uploadPromise})
   },
+  startResearch({ commit, dispatch }) {
+    this.$axios.$post("http://localhost:5000/api/videoFiles/research");
+  },
   async createVideo({state, commit, dispatch }, { video, submission }) {
     
       const createdVideo = await this.$axios.$post("/api/videos", video)

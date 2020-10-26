@@ -15,7 +15,6 @@ using Xabe.FFmpeg;
 namespace VideoLibrary.API.Controllers
 {
     [Route("api/videoFiles")]
-
     public class VideoFilesController : ControllerBase
     {
         private readonly IWebHostEnvironment _env;
@@ -41,33 +40,121 @@ namespace VideoLibrary.API.Controllers
         public async Task<IActionResult> UploadVideoFile(IFormFile video)
         {
             var mime = video.FileName.Split('.').Last();
-            var fileName = string.Concat(Path.GetRandomFileName(), ".", mime);
+            var fileName = string.Concat($"temp_{DateTime.Now.Ticks}", ".", mime);
             var savePath = Path.Combine(_env.WebRootPath, fileName);
 
             await using (var fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write))
             {
                 await video.CopyToAsync(fileStream);
             }
+       
 
-           string outputPath = Path.Combine(_env.WebRootPath, fileName + "FFmpeg" + ".mp4");
-           string executablesPath = Path.Combine(_env.ContentRootPath,"FFmpeg");
-           FFmpeg.SetExecutablesPath(executablesPath);
-           //IConversion result = await FFmpeg.Conversions.FromSnippet.ToWebM(savePath, outputPath);
-           //IConversionResult conversionResult = await result.Start();
+            return Ok(fileName);
+            //return Ok(new ResponseMessage {FileNameConvert = fileName, DurationConvert = conversionResult.Duration.ToString() });
+        }   
 
-            IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(savePath);
+        [HttpPost("research")]
+        public async Task<IActionResult> ConvertResearch()
+        {
+            var originalFile = "VID20200821180752.mp4";
+            var fileName = Path.GetRandomFileName();
+            var targetResearchPath = Path.Combine(_env.WebRootPath, originalFile);
+
+            string executablesPath = Path.Combine(_env.ContentRootPath, "FFmpeg");
+            FFmpeg.SetExecutablesPath(executablesPath);
+
+            string convertFileName = fileName + "_VP9+Opus_1080_FFmpeg" + ".webm";
+            string outputPath = Path.Combine(_env.WebRootPath, convertFileName);
+            IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(targetResearchPath);
+
             IStream videoStream = mediaInfo.VideoStreams.FirstOrDefault()
-                ?.SetCodec(VideoCodec.h264)
-                ?.SetSize(VideoSize.Hd480)
-                ?.SetFramerate(29.97);
+                    ?.SetCodec(VideoCodec.vp9)
+                    ?.SetSize(VideoSize.Hd1080)
+                    ?.SetFramerate(30);
+
             IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
-                ?.SetCodec(AudioCodec.aac);
+                    ?.SetCodec(AudioCodec.opus)
+                    ;
             IConversionResult conversionResult = await FFmpeg.Conversions.New()
                 .AddStream(audioStream, videoStream)
+                
+                .AddParameter("-strict -2", ParameterPosition.PostInput)
+                .SetOutput(outputPath)
+                .Start();
+            //--------------------------------------------------------------
+            convertFileName = fileName + "_VP9+Opus_720_FFmpeg" + ".webm";
+            outputPath = Path.Combine(_env.WebRootPath, convertFileName);
+
+            IStream videoStreamAV = mediaInfo.VideoStreams.FirstOrDefault()
+                    ?.SetCodec(VideoCodec.vp9)
+                    ?.SetSize(VideoSize.Hd720)
+                    ?.SetFramerate(30);
+
+            IStream audioStreamAV = mediaInfo.AudioStreams.FirstOrDefault()
+                    ?.SetCodec(AudioCodec.opus);
+
+            IConversionResult conversionResultAV = await FFmpeg.Conversions.New()
+                .AddStream(audioStreamAV, videoStreamAV)
+                .AddParameter("-strict -2", ParameterPosition.PostInput)
+                .SetOutput(outputPath)
+                .Start();
+            ////------------------------------------------------------------
+            convertFileName = fileName + "_VP9+opus_480_FFmpeg" + ".webm";
+            outputPath = Path.Combine(_env.WebRootPath, convertFileName);
+
+            IStream videoStreamVP = mediaInfo.VideoStreams.FirstOrDefault()
+                    ?.SetCodec(VideoCodec.vp9)
+                    ?.SetSize(VideoSize.Hd480)
+                    ?.SetFramerate(30);
+            IStream audioStreamVP = mediaInfo.AudioStreams.FirstOrDefault()
+                    ?.SetCodec(AudioCodec.opus);
+
+            IConversionResult conversionResultVP = await FFmpeg.Conversions.New()
+                .AddStream(audioStreamVP, videoStreamVP)
+                .AddParameter("-strict -2", ParameterPosition.PostInput)
                 .SetOutput(outputPath)
                 .Start();
 
-            return Ok(fileName);
+            convertFileName = fileName + "_VP9+opus_uhd2160_FFmpeg" + ".webm";
+            outputPath = Path.Combine(_env.WebRootPath, convertFileName);
+
+            IStream videoStreamVPP = mediaInfo.VideoStreams.FirstOrDefault()
+                    ?.SetCodec(VideoCodec.vp9)
+                    ?.SetSize(VideoSize.Uhd2160)
+                    ?.SetFramerate(30);
+            IStream audioStreamVPP = mediaInfo.AudioStreams.FirstOrDefault()
+                    ?.SetCodec(AudioCodec.opus);
+
+            IConversionResult conversionResultVPP = await FFmpeg.Conversions.New()
+                .AddStream(audioStreamVPP, videoStreamVPP)
+                .AddParameter("-strict -2", ParameterPosition.PostInput)
+                .SetOutput(outputPath)
+                .Start();
+
+            convertFileName = fileName + "_VP9+opus_2K_FFmpeg" + ".webm";
+            outputPath = Path.Combine(_env.WebRootPath, convertFileName);
+
+            videoStreamVPP = mediaInfo.VideoStreams.FirstOrDefault()
+                   ?.SetCodec(VideoCodec.vp9)
+                   ?.SetSize(2560, 1440)
+                   ?.SetFramerate(30);
+            audioStreamVPP = mediaInfo.AudioStreams.FirstOrDefault()
+                   ?.SetCodec(AudioCodec.opus);
+
+            conversionResultVPP = await FFmpeg.Conversions.New()
+               .AddStream(audioStreamVPP, videoStreamVPP)
+               .AddParameter("-strict -2", ParameterPosition.PostInput)
+               .SetOutput(outputPath)
+               .Start();
+
+            return Ok();
+        }
+        public class ResponseMessage
+        {
+            public string FileNameConvert { get; set; }
+            public string DurationConvert { get; set; }
         }
     }
+
+
 }

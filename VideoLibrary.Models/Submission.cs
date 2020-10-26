@@ -8,6 +8,7 @@ namespace VideoLibrary.API.Models
     {
         public string VideoId { get; set; }
         public string VideoFile { get; set; }
+        public bool VideoProcessed { get; set; }
         public string Description { get; set; }
     }
 }

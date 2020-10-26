@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VideoLibrary.API.BackgroundServices;
 using VideoLibrary.Data;
 
 namespace VideoLibrary.API
@@ -19,8 +21,12 @@ namespace VideoLibrary.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            //services.AddSingleton<VideoStore>();
+           
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Dev"));
+
+            services.AddHostedService<VideoEditingBackgroundService>();
+            services.AddSingleton(_ => Channel.CreateUnbounded<EditVideoMessage>());
+
             services.AddCors(options => options.AddPolicy(AllCors, build =>
                                                                     build.AllowAnyHeader()
                                                                     .AllowAnyMethod()

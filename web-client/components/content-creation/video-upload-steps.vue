@@ -73,13 +73,14 @@ export default {
         return;
       }
 
-      const videoFile = await this.uploadPromise;
-      console.log("VideoFile",videoFile);
+      const videoFileName = await this.uploadPromise;
+      console.log("VideoFile", videoFileName);
+     
       await this.createVideo({
         video: { name: this.formVideo.videoName },
         submission: {
           description: this.formVideo.submission,
-          videoFile,
+          videoFile: videoFileName,
           videoId: 1,
         },
       });

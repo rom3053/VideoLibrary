@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VideoLibrary.API.BackgroundServices;
 using VideoLibrary.API.Models;
 using VideoLibrary.Data;
 
@@ -21,16 +23,28 @@ namespace VideoLibrary.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Submission> All() => _ctx.Submissions.ToList();
+        public IEnumerable<Submission> All() => _ctx.Submissions
+                                                        .Where(x => x.VideoProcessed)
+                                                        .ToList();
 
         [HttpGet("{id}")]
-        public Submission Get(int id) => _ctx.Submissions.FirstOrDefault(x => x.Id.Equals(id));
+        public Submission Get(int id) => _ctx.Submissions.FirstOrDefault(x => x.Id.Equals(id)
+                                                                               &&x.VideoProcessed);
 
         [HttpPost]
-        public async Task<Submission> Create([FromBody] Submission submission)
+        public async Task<Submission> Create(
+            [FromBody] Submission submission,
+            [FromServices] Channel<EditVideoMessage> channel )
         {
-            _ctx.Add(submission);
+            submission.VideoProcessed = false;
+            _ctx.Add(submission);          
             await _ctx.SaveChangesAsync();
+            await channel.Writer.WriteAsync(new EditVideoMessage
+            {
+                SubmissionId = submission.Id,
+                Input = submission.VideoFile,
+                Output = $"c{DateTime.Now.Ticks}",
+            });
             return submission;
         }
 
