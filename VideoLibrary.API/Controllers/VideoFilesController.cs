@@ -33,6 +33,15 @@ namespace VideoLibrary.API.Controllers
             //return new FileStreamResult(new FileStream(savePath, FileMode.Open, FileAccess.Read), 
             //    "videoFile/*");
         }
+        [HttpGet("preview/{previewImage}")]
+        public IActionResult GetPreviewImage(string previewImage)
+        {
+            var savePath = Path.Combine(_env.WebRootPath, previewImage);
+
+            //return PhysicalFile(savePath, "preview/*");
+            return new FileStreamResult(new FileStream(savePath, FileMode.Open, FileAccess.Read),
+                "preview/*");
+        }
 
         [HttpPost]
         [RequestFormLimits(MultipartBodyLengthLimit = 1073741824)]

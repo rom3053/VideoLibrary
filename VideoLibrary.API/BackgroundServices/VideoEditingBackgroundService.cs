@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using VideoLibrary.Data;
 using Xabe.FFmpeg;
 
+
 namespace VideoLibrary.API.BackgroundServices
 {
     public class VideoEditingBackgroundService : BackgroundService
@@ -40,6 +41,8 @@ namespace VideoLibrary.API.BackgroundServices
 
                 string executablesPath = Path.Combine(_env.ContentRootPath, "FFmpeg");
                 FFmpeg.SetExecutablesPath(executablesPath);
+
+                string previewImageName = Guid.NewGuid() + ".png";
                 try
                 {
 
@@ -56,21 +59,38 @@ namespace VideoLibrary.API.BackgroundServices
 
 
                     IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(inputPath);
+                    
                     IStream videoStream = mediaInfo.VideoStreams.FirstOrDefault()
-                        ?.SetCodec(VideoCodec.h264)
+                        ?.SetCodec(VideoCodec.h264_nvenc)
                         ?.SetSize(VideoSize.Hd480)
-                        ?.SetFramerate(30);
+                        ?.SetFramerate(24);
                     
                     IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
                         ?.SetCodec(AudioCodec.aac);
-                    IConversionResult conversionResult = await FFmpeg.Conversions.New()
-                        //.AddParameter("-hwaccel dxva2", ParameterPosition.PreInput)
+                    
+
+                    string outputSnapshot = Path.Combine(_env.WebRootPath, previewImageName);
+                    IConversion conversionSnapshot =  FFmpeg.Conversions.New().AddParameter($"-i {inputPath} -ss {TimeSpan.FromSeconds(0)}" +
+                                                                                            $" -vframes 1 -vf scale=1920x1080 {outputSnapshot}");
+                    IConversionResult resultSnapshot = await conversionSnapshot.Start();
+
+
+
+                    IConversion conversion = FFmpeg.Conversions.New();
+                    conversion.OnProgress += (sender, args) =>
+                    {
+                        var percent = (int)(Math.Round(args.Duration.TotalSeconds / args.TotalLength.TotalSeconds, 2) * 100);
+                        Console.WriteLine($"[{args.Duration} / {args.TotalLength}] {percent}%");
+                    };
+
+                    IConversionResult conversionResult = await conversion
+                        .AddParameter("-hwaccel_device 0 -hwaccel cuda", ParameterPosition.PreInput)
                         .AddStream(audioStream, videoStream)
-                        
-                        //.AddParameter("-strict -2", ParameterPosition.PostInput)
+                        .AddParameter("-strict -2", ParameterPosition.PostInput)
                         .SetOutput(outputPath)
                         .Start();
-                    Console.WriteLine(conversionResult.Duration+conversionResult.Arguments);
+
+                    Console.WriteLine("\nDuration: " + conversionResult.Duration+"\nCommand: "+conversionResult.Arguments+"\n");
                 }
                 catch (Exception e)
                 {
@@ -83,7 +103,9 @@ namespace VideoLibrary.API.BackgroundServices
                     var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
                     var submission = ctx.Submissions.FirstOrDefault(x => x.Id.Equals(message.SubmissionId));
-
+                    var video = ctx.Videos.FirstOrDefault(v => v.Id.Equals(submission.VideoId));
+                    video.PreviewImage = previewImageName;
+                    
                     submission.VideoFile = message.Output + "FFmpeg" + ".mp4";
                     submission.VideoProcessed = true;
 

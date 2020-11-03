@@ -29,7 +29,7 @@ namespace VideoLibrary.API.Controllers
 
         [HttpGet("{id}")]
         public Submission Get(int id) => _ctx.Submissions.FirstOrDefault(x => x.Id.Equals(id)
-                                                                               &&x.VideoProcessed);
+                                                                               );
 
         [HttpPost]
         public async Task<Submission> Create(

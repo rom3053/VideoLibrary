@@ -2,15 +2,14 @@
   <div class="d-flex justify-center">
     <v-container class="my-5" fluid v-if="videos">
       <v-row dense>
-        <v-col v-for="vv in videos" v-bind:key="vv" cols="3" class="md-lg-auto">
-          <v-card tile flat class="ma-3" :to="`/videos/${vv.id}`">
+        <v-col v-for="vv in videos" v-bind:key="vv"  sm="5" md="3" lg="3" xl="5" >
+          <v-card tile flat class="ma-3" :to="`/videos/${vv.id}`" >
           <v-img class="elevation-6" 
-          src="https://www.w3schools.com/images/w3schools_green.jpg" 
+          :src="`http://localhost:5000/api/videoFiles/preview/${vv.previewImage}`"
           alt="" contain
-          max-height="300"
-          max-width="300">
+          >
              </v-img>
-            <v-card-text>
+            <v-card-text tile flat>
               <div>
                 <p>VideoName - {{ vv.name }}</p>
                 <p>UserName - {{ vv.id }}</p>
