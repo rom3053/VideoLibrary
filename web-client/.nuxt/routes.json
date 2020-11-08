@@ -7,6 +7,13 @@
     "_name": "_401375a6"
   },
   {
+    "name": "videos-sselect-quality",
+    "path": "/videos/sselect-quality",
+    "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\videos\\\\sselect-quality.vue",
+    "chunkName": "pages/videos/sselect-quality",
+    "_name": "_8e1ab056"
+  },
+  {
     "name": "videos-videoSubmission",
     "path": "/videos/:videoSubmission?",
     "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\videos\\\\_videoSubmission.vue",

@@ -22,6 +22,7 @@ let store = {};
   resolveStoreModules(require('..\\store\\submissions.js'), 'submissions.js')
   resolveStoreModules(require('..\\store\\videoFiles.js'), 'videoFiles.js')
   resolveStoreModules(require('..\\store\\videos.js'), 'videos.js')
+  resolveStoreModules(require('..\\store\\videoWatch.js'), 'videoWatch.js')
 
   // If the environment supports hot reloading...
 
@@ -32,6 +33,7 @@ let store = {};
       '..\\store\\submissions.js',
       '..\\store\\videoFiles.js',
       '..\\store\\videos.js',
+      '..\\store\\videoWatch.js',
     ], () => {
       // Update `root.modules` with the latest definitions.
       updateModules()
