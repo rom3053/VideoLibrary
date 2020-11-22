@@ -29,11 +29,42 @@ namespace VideoLibrary.API.Controllers
             .FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
 
         [HttpGet("{videoId}/submissions")]
-        public IEnumerable<Submission> ListSubmissionsForVideo(string videoId) =>
-            _ctx.Submissions
-            .Where(x => x.VideoId.Equals(videoId, StringComparison.InvariantCultureIgnoreCase))
-            .ToList();
+        public IEnumerable<Submission> ListSubmissionsForVideo(string videoId) {
+            var sub = _ctx.Submissions
+             .Single(x => x.VideoId.Equals(videoId, StringComparison.InvariantCultureIgnoreCase));
 
+            _ctx.Entry(sub)
+                     .Collection(b => b.VideoQualities)
+                     .Load();
+            List<VideoQuality> qualities = new List<VideoQuality>();
+            foreach (var item in sub.VideoQualities)
+            {
+                qualities.Add(new VideoQuality
+                {
+                    Submission = null,
+                    SubmissionId = 23,
+                    Deleted = false,
+                    Id = item.Id,
+                    QualityName = item.QualityName,
+                    QualityVideoLink = item.QualityVideoLink
+                }); 
+            }
+
+            //проблема в вызове данных с БД, создание ВьюМодели для отправки данных
+            Submission submissionToSend = new Submission
+            {
+                Deleted = sub.Deleted,
+                Description = sub.Description,
+                Id = sub.Id,
+                VideoFile = sub.VideoFile,
+                VideoId = sub.VideoId,
+                VideoProcessed = sub.VideoProcessed,
+                VideoQualities = qualities
+            };
+            List<Submission> submissions = new List<Submission>();
+            submissions.Add(submissionToSend);
+            return submissions;
+}
 
         [HttpPost]
         public async Task<Video> Create([FromBody] Video video)

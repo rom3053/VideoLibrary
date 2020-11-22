@@ -14,7 +14,7 @@
       <v-list-item v-for="(item, index) in items"
                    :key="index" @click="changeVideoQuality(index)">
         <v-list-item-title>
-          {{index}} - {{ item.title }} - {{submissions[0].videoId}}
+          {{index}} - {{ item.title }}
 
         </v-list-item-title>
       </v-list-item>

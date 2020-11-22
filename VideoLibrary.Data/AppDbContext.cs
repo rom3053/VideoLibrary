@@ -15,5 +15,16 @@ namespace VideoLibrary.Data
 
         public DbSet<Video> Videos { get; set; }
         public DbSet<Submission> Submissions { get; set; }
+        public DbSet<VideoQuality> VideoQualities { get; set; }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+        //    modelBuilder.Entity<Submission>().OwnsMany(p => p.VideoQualities, q =>
+        //     {
+        //         q.WithOwner().HasForeignKey("SubmissionId");
+        //         q.Property<int>("Id");
+        //         q.HasKey("Id");
+        //     });
+        //}
     }
 }

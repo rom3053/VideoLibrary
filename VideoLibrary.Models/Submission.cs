@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
+
 namespace VideoLibrary.API.Models
 {
     public class Submission : BaseModel<int>
@@ -10,5 +11,7 @@ namespace VideoLibrary.API.Models
         public string VideoFile { get; set; }
         public bool VideoProcessed { get; set; }
         public string Description { get; set; }
+
+        public IList<VideoQuality> VideoQualities { get; set; } = new List<VideoQuality>();
     }
 }

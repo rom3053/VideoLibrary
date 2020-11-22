@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using VideoLibrary.API.Models;
 using VideoLibrary.Data;
 using Xabe.FFmpeg;
 
@@ -108,6 +109,14 @@ namespace VideoLibrary.API.BackgroundServices
                     
                     submission.VideoFile = message.Output + "FFmpeg" + ".mp4";
                     submission.VideoProcessed = true;
+                    VideoQuality videoQuality = new VideoQuality
+                    {
+                        QualityName = "480",
+                        Submission = submission,
+                        SubmissionId = submission.Id,
+                    };
+                    //ctx.VideoQualities.Add(videoQuality);
+                    submission.VideoQualities.Add(videoQuality);
 
                     await ctx.SaveChangesAsync(stoppingToken);
                 }
