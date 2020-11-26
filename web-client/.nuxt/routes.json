@@ -7,11 +7,11 @@
     "_name": "_401375a6"
   },
   {
-    "name": "videos-sselect-quality",
-    "path": "/videos/sselect-quality",
-    "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\videos\\\\sselect-quality.vue",
-    "chunkName": "pages/videos/sselect-quality",
-    "_name": "_8e1ab056"
+    "name": "videos-v-select-quality",
+    "path": "/videos/v-select-quality",
+    "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\videos\\\\v-select-quality.vue",
+    "chunkName": "pages/videos/v-select-quality",
+    "_name": "_94d204be"
   },
   {
     "name": "videos-videoSubmission",

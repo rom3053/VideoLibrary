@@ -4,7 +4,7 @@ import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
 const _401375a6 = () => interopDefault(import('..\\pages\\inspire.vue' /* webpackChunkName: "pages/inspire" */))
-const _8e1ab056 = () => interopDefault(import('..\\pages\\videos\\sselect-quality.vue' /* webpackChunkName: "pages/videos/sselect-quality" */))
+const _94d204be = () => interopDefault(import('..\\pages\\videos\\v-select-quality.vue' /* webpackChunkName: "pages/videos/v-select-quality" */))
 const _7dcd4eb8 = () => interopDefault(import('..\\pages\\videos\\_videoSubmission.vue' /* webpackChunkName: "pages/videos/_videoSubmission" */))
 const _e17fa6c4 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
@@ -29,9 +29,9 @@ export const routerOptions = {
     component: _401375a6,
     name: "inspire"
   }, {
-    path: "/videos/sselect-quality",
-    component: _8e1ab056,
-    name: "videos-sselect-quality"
+    path: "/videos/v-select-quality",
+    component: _94d204be,
+    name: "videos-v-select-quality"
   }, {
     path: "/videos/:videoSubmission?",
     component: _7dcd4eb8,

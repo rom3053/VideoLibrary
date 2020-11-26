@@ -115,9 +115,15 @@ namespace VideoLibrary.API.BackgroundServices
                         Submission = submission,
                         SubmissionId = submission.Id,
                     };
+                    VideoQuality videoQuality1 = new VideoQuality
+                    {
+                        QualityName = "1080",
+                        Submission = submission,
+                        SubmissionId = submission.Id,
+                    };
                     //ctx.VideoQualities.Add(videoQuality);
+                    submission.VideoQualities.Add(videoQuality1);
                     submission.VideoQualities.Add(videoQuality);
-
                     await ctx.SaveChangesAsync(stoppingToken);
                 }
             }
