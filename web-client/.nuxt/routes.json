@@ -3,28 +3,24 @@
     "name": "inspire",
     "path": "/inspire",
     "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\inspire.vue",
-    "chunkName": "pages/inspire",
-    "_name": "_401375a6"
+    "chunkName": "pages/inspire"
   },
   {
     "name": "videos-v-select-quality",
     "path": "/videos/v-select-quality",
     "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\videos\\\\v-select-quality.vue",
-    "chunkName": "pages/videos/v-select-quality",
-    "_name": "_94d204be"
+    "chunkName": "pages/videos/v-select-quality"
   },
   {
     "name": "videos-videoSubmission",
     "path": "/videos/:videoSubmission?",
     "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\videos\\\\_videoSubmission.vue",
-    "chunkName": "pages/videos/_videoSubmission",
-    "_name": "_7dcd4eb8"
+    "chunkName": "pages/videos/_videoSubmission"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\Users\\\\rom30\\\\source\\\\repos\\\\VideoLibrary\\\\web-client\\\\pages\\\\index.vue",
-    "chunkName": "pages/index",
-    "_name": "_e17fa6c4"
+    "chunkName": "pages/index"
   }
 ]
