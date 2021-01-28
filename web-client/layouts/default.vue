@@ -2,7 +2,7 @@
   <v-app dark>
     <v-app-bar app dense>
       <v-toolbar-title>
-      <router-link tag="v-toolbar-title" :to="`/`">Videos Library</router-link>
+      <router-link tag="v-toolbar-title" :to="`/`">Video Library</router-link>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -12,9 +12,7 @@
     </v-app-bar>
     
     <v-main>
-
       <nuxt />
-
     </v-main>
 
 

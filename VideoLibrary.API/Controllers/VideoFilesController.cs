@@ -72,89 +72,97 @@ namespace VideoLibrary.API.Controllers
             string executablesPath = Path.Combine(_env.ContentRootPath, "FFmpeg");
             FFmpeg.SetExecutablesPath(executablesPath);
 
-            string convertFileName = fileName + "_VP9+Opus_1080_FFmpeg" + ".webm";
+            string convertFileName = fileName + "FixedBitrate_VP9+Opus_1080_FFmpeg" + ".webm";
+          
             string outputPath = Path.Combine(_env.WebRootPath, convertFileName);
+            
             IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(targetResearchPath);
+            IConversion conversion = FFmpeg.Conversions.New();
+            conversion.OnProgress += (sender, args) =>
+            {
+                var percent = (int)(Math.Round(args.Duration.TotalSeconds / args.TotalLength.TotalSeconds, 2) * 100);
+                Console.WriteLine($"[{args.Duration} / {args.TotalLength}] {percent}%");
+            };
+            //IStream videoStream = mediaInfo.VideoStreams.FirstOrDefault()
+            //        ?.SetCodec(VideoCodec.vp9)
+            //        ?.SetSize(VideoSize.Hd1080)
+            //        ?.SetFramerate(30);
 
-            IStream videoStream = mediaInfo.VideoStreams.FirstOrDefault()
-                    ?.SetCodec(VideoCodec.vp9)
-                    ?.SetSize(VideoSize.Hd1080)
-                    ?.SetFramerate(30);
-
-            IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
-                    ?.SetCodec(AudioCodec.opus)
-                    ;
-            IConversionResult conversionResult = await FFmpeg.Conversions.New()
-                .AddStream(audioStream, videoStream)
+            //IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
+            //        ?.SetCodec(AudioCodec.opus)
+            //        ;
+            //IConversionResult conversionResult = await conversion
+            //    .AddStream(videoStream)
                 
-                .AddParameter("-strict -2", ParameterPosition.PostInput)
-                .SetOutput(outputPath)
-                .Start();
+            //    .AddParameter("-strict -2", ParameterPosition.PostInput)
+            //    .SetOutput(outputPath)
+            //    .Start();
             //--------------------------------------------------------------
-            convertFileName = fileName + "_VP9+Opus_720_FFmpeg" + ".webm";
+
+            convertFileName = fileName + "FixedBitrate_h264_1080_FFmpeg" + ".mp4";
             outputPath = Path.Combine(_env.WebRootPath, convertFileName);
 
             IStream videoStreamAV = mediaInfo.VideoStreams.FirstOrDefault()
-                    ?.SetCodec(VideoCodec.vp9)
-                    ?.SetSize(VideoSize.Hd720)
+                    ?.SetCodec(VideoCodec.h264)
+                    ?.SetSize(VideoSize.Hd1080)
                     ?.SetFramerate(30);
 
             IStream audioStreamAV = mediaInfo.AudioStreams.FirstOrDefault()
                     ?.SetCodec(AudioCodec.opus);
 
-            IConversionResult conversionResultAV = await FFmpeg.Conversions.New()
-                .AddStream(audioStreamAV, videoStreamAV)
+            IConversionResult conversionResultAV = await conversion
+                .AddStream(videoStreamAV)
                 .AddParameter("-strict -2", ParameterPosition.PostInput)
                 .SetOutput(outputPath)
                 .Start();
             ////------------------------------------------------------------
-            convertFileName = fileName + "_VP9+opus_480_FFmpeg" + ".webm";
-            outputPath = Path.Combine(_env.WebRootPath, convertFileName);
+            //convertFileName = fileName + "_VP9+opus_480_FFmpeg" + ".webm";
+            //outputPath = Path.Combine(_env.WebRootPath, convertFileName);
 
-            IStream videoStreamVP = mediaInfo.VideoStreams.FirstOrDefault()
-                    ?.SetCodec(VideoCodec.vp9)
-                    ?.SetSize(VideoSize.Hd480)
-                    ?.SetFramerate(30);
-            IStream audioStreamVP = mediaInfo.AudioStreams.FirstOrDefault()
-                    ?.SetCodec(AudioCodec.opus);
+            //IStream videoStreamVP = mediaInfo.VideoStreams.FirstOrDefault()
+            //        ?.SetCodec(VideoCodec.vp9)
+            //        ?.SetSize(VideoSize.Hd480)
+            //        ?.SetFramerate(30);
+            //IStream audioStreamVP = mediaInfo.AudioStreams.FirstOrDefault()
+            //        ?.SetCodec(AudioCodec.opus);
 
-            IConversionResult conversionResultVP = await FFmpeg.Conversions.New()
-                .AddStream(audioStreamVP, videoStreamVP)
-                .AddParameter("-strict -2", ParameterPosition.PostInput)
-                .SetOutput(outputPath)
-                .Start();
+            //IConversionResult conversionResultVP = await FFmpeg.Conversions.New()
+            //    .AddStream(audioStreamVP, videoStreamVP)
+            //    .AddParameter("-strict -2", ParameterPosition.PostInput)
+            //    .SetOutput(outputPath)
+            //    .Start();
 
-            convertFileName = fileName + "_VP9+opus_uhd2160_FFmpeg" + ".webm";
-            outputPath = Path.Combine(_env.WebRootPath, convertFileName);
+            //convertFileName = fileName + "_VP9+opus_uhd2160_FFmpeg" + ".webm";
+            //outputPath = Path.Combine(_env.WebRootPath, convertFileName);
 
-            IStream videoStreamVPP = mediaInfo.VideoStreams.FirstOrDefault()
-                    ?.SetCodec(VideoCodec.vp9)
-                    ?.SetSize(VideoSize.Uhd2160)
-                    ?.SetFramerate(30);
-            IStream audioStreamVPP = mediaInfo.AudioStreams.FirstOrDefault()
-                    ?.SetCodec(AudioCodec.opus);
+            //IStream videoStreamVPP = mediaInfo.VideoStreams.FirstOrDefault()
+            //        ?.SetCodec(VideoCodec.vp9)
+            //        ?.SetSize(VideoSize.Uhd2160)
+            //        ?.SetFramerate(30);
+            //IStream audioStreamVPP = mediaInfo.AudioStreams.FirstOrDefault()
+            //        ?.SetCodec(AudioCodec.opus);
 
-            IConversionResult conversionResultVPP = await FFmpeg.Conversions.New()
-                .AddStream(audioStreamVPP, videoStreamVPP)
-                .AddParameter("-strict -2", ParameterPosition.PostInput)
-                .SetOutput(outputPath)
-                .Start();
+            //IConversionResult conversionResultVPP = await FFmpeg.Conversions.New()
+            //    .AddStream(audioStreamVPP, videoStreamVPP)
+            //    .AddParameter("-strict -2", ParameterPosition.PostInput)
+            //    .SetOutput(outputPath)
+            //    .Start();
 
-            convertFileName = fileName + "_VP9+opus_2K_FFmpeg" + ".webm";
-            outputPath = Path.Combine(_env.WebRootPath, convertFileName);
+            //convertFileName = fileName + "_VP9+opus_2K_FFmpeg" + ".webm";
+            //outputPath = Path.Combine(_env.WebRootPath, convertFileName);
 
-            videoStreamVPP = mediaInfo.VideoStreams.FirstOrDefault()
-                   ?.SetCodec(VideoCodec.vp9)
-                   ?.SetSize(2560, 1440)
-                   ?.SetFramerate(30);
-            audioStreamVPP = mediaInfo.AudioStreams.FirstOrDefault()
-                   ?.SetCodec(AudioCodec.opus);
+            //videoStreamVPP = mediaInfo.VideoStreams.FirstOrDefault()
+            //       ?.SetCodec(VideoCodec.vp9)
+            //       ?.SetSize(2560, 1440)
+            //       ?.SetFramerate(30);
+            //audioStreamVPP = mediaInfo.AudioStreams.FirstOrDefault()
+            //       ?.SetCodec(AudioCodec.opus);
 
-            conversionResultVPP = await FFmpeg.Conversions.New()
-               .AddStream(audioStreamVPP, videoStreamVPP)
-               .AddParameter("-strict -2", ParameterPosition.PostInput)
-               .SetOutput(outputPath)
-               .Start();
+            //conversionResultVPP = await FFmpeg.Conversions.New()
+            //   .AddStream(audioStreamVPP, videoStreamVPP)
+            //   .AddParameter("-strict -2", ParameterPosition.PostInput)
+            //   .SetOutput(outputPath)
+            //   .Start();
 
             return Ok();
         }
