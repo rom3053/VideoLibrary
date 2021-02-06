@@ -50,7 +50,7 @@ namespace VideoLibrary.API.Controllers
                 }); 
             }
 
-            //проблема в вызове данных с БД, создание ВьюМодели для отправки данных
+            
             Submission submissionToSend = new Submission
             {
                 Deleted = sub.Deleted,
